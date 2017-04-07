@@ -10,7 +10,7 @@ model = model_from_json(open(model_architecture).read())
 model.load_weights(model_weights)
 
 #load images
-img_names = ['cat-standing.jpg', 'dog.jpg']
+img_names = ['cat2.jpg', 'dog.jpg']
 imgs = [np.transpose(scipy.misc.imresize(scipy.misc.imread(img_name), (32, 32)),
                      (1, 0, 2)).astype('float32')
            for img_name in img_names]
