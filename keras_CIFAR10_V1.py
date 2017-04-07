@@ -7,7 +7,7 @@ from keras.optimizers import SGD, Adam, RMSprop
 
 from keras.preprocessing.image import ImageDataGenerator
 
-from quiver_engine import server
+#from quiver_engine import server
 
 import matplotlib.pyplot as plt
 
@@ -48,14 +48,14 @@ model = Sequential()
 model.add(Conv2D(32, kernel_size=3, padding='same',
                         input_shape=(IMG_ROWS, IMG_COLS, IMG_CHANNELS)))
 model.add(Activation('relu'))
-model.add(Conv2D(32, kernel_size=, padding='same'))
+model.add(Conv2D(32, kernel_size=3, padding='same'))
 model.add(Activation('relu'))
 model.add(MaxPooling2D(pool_size=(2, 2)))
 model.add(Dropout(0.25))
  
 model.add(Conv2D(64, kernel_size=3, padding='same'))
 model.add(Activation('relu'))
-model.add(Convolution2D(64, 3, 3))
+model.add(Conv2D(64, 3, 3))
 model.add(Activation('relu'))
 model.add(MaxPooling2D(pool_size=(2, 2)))
 model.add(Dropout(0.25))
@@ -90,7 +90,7 @@ datagen.fit(X_train)
 # train
  
 history = model.fit(X_train, Y_train, batch_size=BATCH_SIZE,
-	nb_epoch=NB_EPOCH, validation_split=VALIDATION_SPLIT, 
+	epochs=NB_EPOCH, validation_split=VALIDATION_SPLIT, 
 	verbose=VERBOSE)
 
 #model.fit_generator(datagen.flow(X_train, Y_train,
@@ -99,7 +99,7 @@ history = model.fit(X_train, Y_train, batch_size=BATCH_SIZE,
 #                        nb_epoch=NB_EPOCH, 
 #                        verbose=VERBOSE)
 
-server.launch(model)
+#server.launch(model)
 
 
 print('Testing...')
