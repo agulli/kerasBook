@@ -1,6 +1,7 @@
 # import the necessary packages
+from keras import backend as K
 from keras.models import Sequential
-from keras.layers.convolutional import Convolution2D
+from keras.layers.convolutional import Conv2D
 from keras.layers.convolutional import MaxPooling2D
 from keras.layers.core import Activation
 from keras.layers.core import Flatten
@@ -20,12 +21,12 @@ class LeNet:
 	def build(input_shape, classes):
 		model = Sequential()
 		# CONV => RELU => POOL
-		model.add(Convolution2D(20, 5, 5, border_mode="same",
+		model.add(Conv2D(20, kernel_size=5, padding="same",
 			input_shape=input_shape))
 		model.add(Activation("relu"))
 		model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
 		# CONV => RELU => POOL
-		model.add(Convolution2D(50, 5, 5, border_mode="same"))
+		model.add(Conv2D(50, kernel_size=5, padding="same"))
 		model.add(Activation("relu"))
 		model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
 		# Flatten => RELU layers
@@ -40,11 +41,11 @@ class LeNet:
 		return model
 
 # network and training
-NB_EPOCH = 4
+NB_EPOCH = 20
 BATCH_SIZE = 128
 VERBOSE = 1
-OPTIMIZER = RMSprop()
-VALIDATION_SPLIT=0.995
+OPTIMIZER = Adam()
+VALIDATION_SPLIT=0.2
 
 IMG_ROWS, IMG_COLS = 28, 28 # input image dimensions
 NB_CLASSES = 10  # number of outputs = number of digits
@@ -52,6 +53,7 @@ INPUT_SHAPE = (1, IMG_ROWS, IMG_COLS)
 
 # data: shuffled and split between train and test sets
 (X_train, y_train), (X_test, y_test) = mnist.load_data()
+K.set_image_dim_ordering("th")
 
 # consider them as float and normalize
 X_train = X_train.astype('float32')
@@ -76,7 +78,7 @@ model.compile(loss="categorical_crossentropy", optimizer=OPTIMIZER,
 	metrics=["accuracy"])
 
 history = model.fit(X_train, y_train, 
-		batch_size=BATCH_SIZE, nb_epoch=NB_EPOCH, 
+		batch_size=BATCH_SIZE, epochs=NB_EPOCH, 
 		verbose=VERBOSE, validation_split=VALIDATION_SPLIT)
 
 score = model.evaluate(X_test, y_test, verbose=VERBOSE)
